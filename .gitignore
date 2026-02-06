@@ -14,9 +14,6 @@ __pycache__/
 .env
 .env.local
 
-# Developer Documentation (not for version control)
-CODEBASE_EXPLANATION.md
-
 # IDE
 .vscode/
 .idea/
