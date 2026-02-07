@@ -79,7 +79,14 @@ class DietRequest(BaseModel):
         )
     ]
 
-   
+    activity_level: Annotated[
+        Literal["low", "high", "medium"],
+        Field(
+            title="Activity Level",
+            description="Your activity level: 'low' for sedentary, 'medium' for moderate, 'high' for very active",
+            examples=["medium"]
+        )
+    ]
     
     @field_validator('height')
     @classmethod
