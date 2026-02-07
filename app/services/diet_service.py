@@ -35,6 +35,22 @@ class DietService:
         "bulk": 36
     }
     
+    # Activity level multipliers for TDEE calculation
+    ACTIVITY_MULTIPLIERS = {
+        "sedentary": 1.2,           # Little or no exercise
+        "lightly_active": 1.375,    # Light exercise 1-3 days/week
+        "moderately_active": 1.55,  # Moderate exercise 3-5 days/week
+        "very_active": 1.725,       # Hard exercise 6-7 days/week
+        "extra_active": 1.9         # Very hard exercise & physical job
+    }
+    
+    # Goal-based calorie adjustments (applied to TDEE)
+    GOAL_ADJUSTMENTS = {
+        "maintain": 0,      # No adjustment
+        "cut": -500,        # 500 calorie deficit
+        "bulk": 300         # 300 calorie surplus
+    }
+    
     PROTEIN_MULTIPLIERS = {
         "maintain": 1.6,
         "cut": 2.2,
@@ -88,28 +104,77 @@ class DietService:
         except Exception as e:
             raise CalculationException(f"BMI calculation failed: {str(e)}")
     
-    def calculate_calories(self) -> int:
+    def calculate_bmr(self) -> float:
         """
-        Calculate daily calorie requirements based on weight and goal.
+        Calculate Basal Metabolic Rate using Mifflin-St Jeor Equation.
+        
+        This is the number of calories your body burns at rest.
         
         Formulas:
-        - Maintain: weight × 32 kcal/kg
-        - Cut: weight × 28 kcal/kg
-        - Bulk: weight × 36 kcal/kg
+        - Male: BMR = (10 × weight in kg) + (6.25 × height in cm) - (5 × age) + 5
+        - Female: BMR = (10 × weight in kg) + (6.25 × height in cm) - (5 × age) - 161
         
         Returns:
-            Daily calorie requirement in kcal
+            Basal Metabolic Rate in kcal/day
         """
-        goal = self.user.goal.lower()
-        multiplier = self.CALORIE_MULTIPLIERS.get(goal, 32)
-        calories = self.user.weight * multiplier
+        weight_kg = self.user.weight
+        height_cm = self.user.height * 100  # Convert meters to cm
+        age = self.user.age
         
-        logger.debug(f"Calories calculated for {goal}: {calories} kcal")
+        if self.user.gender.lower() == "male":
+            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
+        else:  # female
+            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
+        
+        logger.debug(f"BMR calculated for {self.user.gender}: {bmr:.0f} kcal")
+        return round(bmr, 1)
+    
+    def calculate_tdee(self) -> float:
+        """
+        Calculate Total Daily Energy Expenditure.
+        
+        TDEE = BMR × Activity Multiplier
+        
+        Returns:
+            Total daily calories needed to maintain current weight
+        """
+        bmr = self.calculate_bmr()
+        activity_multiplier = self.ACTIVITY_MULTIPLIERS.get(
+            self.user.activity_level.lower(),
+            1.55  # Default to moderately active
+        )
+        
+        tdee = bmr * activity_multiplier
+        logger.debug(f"TDEE calculated: {tdee:.0f} kcal (BMR: {bmr}, Activity: {self.user.activity_level})")
+        return round(tdee, 1)
+    
+    def calculate_calories(self) -> int:
+        """
+        Calculate daily calorie requirements based on TDEE and fitness goal.
+        
+        Uses scientifically accurate Mifflin-St Jeor equation with activity multipliers,
+        then adjusts for fitness goals:
+        - Maintain: TDEE (no change)
+        - Cut: TDEE - 500 kcal (for ~0.5kg/week loss)
+        - Bulk: TDEE + 300 kcal (for lean muscle gain)
+        
+        Returns:
+            Daily calorie target in kcal
+        """
+        tdee = self.calculate_tdee()
+        goal = self.user.goal.lower()
+        adjustment = self.GOAL_ADJUSTMENTS.get(goal, 0)
+        
+        calories = tdee + adjustment
+        logger.debug(f"Calories calculated for {goal}: {calories:.0f} kcal (TDEE: {tdee}, Adjustment: {adjustment:+d})")
         return round(calories)
     
     def calculate_protein(self) -> float:
         """
         Calculate daily protein requirements based on weight and goal.
+        
+        Protein needs are adjusted based on activity level and goals.
+        Higher activity and cutting phases require more protein.
         
         Formulas:
         - Maintain: weight × 1.6 g/kg
@@ -186,10 +251,19 @@ class DietService:
         Returns:
             Complete diet plan dictionary with all calculated values
         """
+        bmr = self.calculate_bmr()
+        tdee = self.calculate_tdee()
+        
         return {
             "age": self.user.age,
+            "gender": self.user.gender,
+            "activity_level": self.user.activity_level,
             "goal": self.user.goal,
             "bmi": self.calculate_bmi(),
+            "metabolism": {
+                "bmr": round(bmr),
+                "tdee": round(tdee)
+            },
             "macros": {
                 "calories": self.calculate_calories(),
                 "protein": self.calculate_protein()

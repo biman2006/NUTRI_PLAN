@@ -3,6 +3,10 @@ venv/
 env/
 ENV/
 
+# Developer Documentation (not for version control)
+CODEBASE_EXPLANATION.md
+NEW_FIELDS_GUIDE.md
+
 # Python
 __pycache__/
 *.pyc

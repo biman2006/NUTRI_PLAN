@@ -12,8 +12,10 @@ class DietRequest(BaseModel):
     
     Attributes:
         age: User's age in years (9-119)
+        gender: User's biological gender (male/female)
         height: User's height in meters (e.g., 1.75)
         weight: User's weight in kilograms (26-299)
+        activity_level: Physical activity level (sedentary to very_active)
         goal: Fitness goal - cut (lose weight), bulk (gain muscle), or maintain
     """
     
@@ -25,6 +27,15 @@ class DietRequest(BaseModel):
             title="Age",
             description="Your age in years (must be between 9 and 119)",
             examples=[25, 30, 45]
+        )
+    ]
+    
+    gender: Annotated[
+        Literal["male", "female"],
+        Field(
+            title="Gender",
+            description="Biological gender for accurate calorie calculations",
+            examples=["male"]
         )
     ]
     
@@ -47,6 +58,15 @@ class DietRequest(BaseModel):
             title="Weight",
             description="Your weight in kilograms",
             examples=[70, 65, 85]
+        )
+    ]
+    
+    activity_level: Annotated[
+        Literal["sedentary", "lightly_active", "moderately_active", "very_active", "extra_active"],
+        Field(
+            title="Activity Level",
+            description="Daily physical activity level: sedentary (little/no exercise), lightly_active (1-3 days/week), moderately_active (3-5 days/week), very_active (6-7 days/week), extra_active (very hard exercise/physical job)",
+            examples=["moderately_active"]
         )
     ]
     
@@ -79,8 +99,10 @@ class DietRequest(BaseModel):
         json_schema_extra = {
             "example": {
                 "age": 25,
+                "gender": "male",
                 "height": 1.75,
                 "weight": 70,
+                "activity_level": "moderately_active",
                 "goal": "maintain"
             }
         }
