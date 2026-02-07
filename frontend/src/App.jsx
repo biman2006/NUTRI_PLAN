@@ -1,119 +1,285 @@
-import { useState } from "react";
+import { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [age, setAge] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [goal, setGoal] = useState("cut");
+  // Form state - all 6 required fields
+  const [formData, setFormData] = useState({
+    age: '',
+    gender: '',
+    height: '',
+    weight: '',
+    activity_level: '',
+    goal: ''
+  });
 
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
     setResult(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/diet-plan", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+      const response = await fetch(`${apiUrl}/diet-plan`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          age: Number(age),
-          height: Number(height),
-          weight: Number(weight),
-          goal: goal,
-        }),
+          age: Number(formData.age),
+          gender: formData.gender,
+          height: Number(formData.height),
+          weight: Number(formData.weight),
+          activity_level: formData.activity_level,
+          goal: formData.goal
+        })
       });
 
       if (!response.ok) {
-        throw new Error("API Error! Check backend running or input invalid.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to generate plan');
       }
 
       const data = await response.json();
-      setResult(data);
+      setResult(data.data);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
+  const activityLevels = [
+    { value: 'sedentary', label: 'Sedentary', desc: 'Little or no exercise' },
+    { value: 'lightly_active', label: 'Light', desc: '1-3 days/week' },
+    { value: 'moderately_active', label: 'Moderate', desc: '3-5 days/week' },
+    { value: 'very_active', label: 'Very Active', desc: '6-7 days/week' },
+    { value: 'extra_active', label: 'Athlete', desc: 'Intense daily training' }
+  ];
+
+  const goals = [
+    { value: 'cut', label: 'Cut', emoji: '📉', desc: 'Lose weight' },
+    { value: 'maintain', label: 'Maintain', emoji: '⚖️', desc: 'Stay balanced' },
+    { value: 'bulk', label: 'Bulk', emoji: '💪', desc: 'Build muscle' }
+  ];
+
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial" }}>
-      <h1>🥗 Diet Planner Website</h1>
-      <p>Enter your details and generate your diet plan.</p>
+    <div className="app">
+      {/* Hero Section */}
+      <header className="hero">
+        <div className="hero-accent"></div>
+        <img src="/NutiPlanLogo.png" alt="Nutri Plan Logo" className="hero-logo" />
+        <h1 className="hero-title">
+          Your Body,<br />
+          <span className="hero-emphasis">Your Science</span>
+        </h1>
+        <p className="hero-subtitle">
+          Nutrition planning built on metabolic science,<br />designed for living humans.
+        </p>
+      </header>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          maxWidth: "400px",
-        }}
-      >
-        <input
-          type="number"
-          placeholder="Enter Age"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          required
-        />
+      {/* Main Container */}
+      <main className="container">
+        {!result ? (
+          <form className="diet-form" onSubmit={handleSubmit}>
+            {/* Personal Info Section */}
+            <section className="form-section">
+              <h2 className="section-title">Your Vitals</h2>
 
-        <input
-          type="number"
-          step="0.01"
-          placeholder="Enter Height (meter)"
-          value={height}
-          onChange={(e) => setHeight(e.target.value)}
-          required
-        />
+              <div className="input-grid">
+                <div className="input-group">
+                  <label htmlFor="age">Age</label>
+                  <input
+                    id="age"
+                    type="number"
+                    min="9"
+                    max="119"
+                    value={formData.age}
+                    onChange={(e) => handleChange('age', e.target.value)}
+                    placeholder="25"
+                    required
+                  />
+                </div>
 
-        <input
-          type="number"
-          step="0.01"
-          placeholder="Enter Weight (kg)"
-          value={weight}
-          onChange={(e) => setWeight(e.target.value)}
-          required
-        />
+                <div className="input-group">
+                  <label htmlFor="height">Height (meters)</label>
+                  <input
+                    id="height"
+                    type="number"
+                    step="0.01"
+                    min="0.5"
+                    max="3"
+                    value={formData.height}
+                    onChange={(e) => handleChange('height', e.target.value)}
+                    placeholder="1.75"
+                    required
+                  />
+                </div>
 
-        <select value={goal} onChange={(e) => setGoal(e.target.value)}>
-          <option value="cut">Cut</option>
-          <option value="bulk">Bulk</option>
-          <option value="maintain">Maintain</option>
-        </select>
+                <div className="input-group">
+                  <label htmlFor="weight">Weight (kg)</label>
+                  <input
+                    id="weight"
+                    type="number"
+                    step="0.1"
+                    min="26"
+                    max="299"
+                    value={formData.weight}
+                    onChange={(e) => handleChange('weight', e.target.value)}
+                    placeholder="70"
+                    required
+                  />
+                </div>
+              </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Generating..." : "Generate Diet Plan"}
-        </button>
-      </form>
+              {/* Gender Selection */}
+              <div className="gender-selector">
+                <label className="selector-label">Gender</label>
+                <div className="gender-options">
+                  <button
+                    type="button"
+                    className={`gender-btn ${formData.gender === 'male' ? 'active' : ''}`}
+                    onClick={() => handleChange('gender', 'male')}
+                  >
+                    <span className="gender-icon">♂</span>
+                    <span>Male</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`gender-btn ${formData.gender === 'female' ? 'active' : ''}`}
+                    onClick={() => handleChange('gender', 'female')}
+                  >
+                    <span className="gender-icon">♀</span>
+                    <span>Female</span>
+                  </button>
+                </div>
+              </div>
+            </section>
 
-      {error && (
-        <p style={{ color: "red", marginTop: "20px" }}>❌ Error: {error}</p>
-      )}
+            {/* Activity Level Section */}
+            <section className="form-section">
+              <h2 className="section-title">Activity Level</h2>
+              <div className="activity-grid">
+                {activityLevels.map((level) => (
+                  <button
+                    key={level.value}
+                    type="button"
+                    className={`activity-card ${formData.activity_level === level.value ? 'active' : ''}`}
+                    onClick={() => handleChange('activity_level', level.value)}
+                  >
+                    <span className="activity-label">{level.label}</span>
+                    <span className="activity-desc">{level.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
 
-      {result && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>✅ Diet Plan Result</h2>
-          <pre
-            style={{
-              background: "#111",
-              color: "lime",
-              padding: "15px",
-              borderRadius: "10px",
-              overflowX: "auto",
-            }}
-          >
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </div>
-      )}
+            {/* Goal Section */}
+            <section className="form-section">
+              <h2 className="section-title">Your Goal</h2>
+              <div className="goal-grid">
+                {goals.map((goal) => (
+                  <button
+                    key={goal.value}
+                    type="button"
+                    className={`goal-card ${formData.goal === goal.value ? 'active' : ''}`}
+                    onClick={() => handleChange('goal', goal.value)}
+                  >
+                    <span className="goal-emoji">{goal.emoji}</span>
+                    <span className="goal-label">{goal.label}</span>
+                    <span className="goal-desc">{goal.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={loading || !formData.gender || !formData.activity_level || !formData.goal}
+            >
+              {loading ? (
+                <span className="btn-loading">Analyzing...</span>
+              ) : (
+                <span>Generate My Plan</span>
+              )}
+            </button>
+
+            {error && (
+              <div className="error-message">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
+          </form>
+        ) : (
+          <div className="results">
+            {/* Stats Overview */}
+            <div className="results-header">
+              <h2 className="results-title">Your Nutritional Blueprint</h2>
+              <button className="reset-btn" onClick={() => setResult(null)}>
+                Start Over
+              </button>
+            </div>
+
+            {/* Key Metrics */}
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <span className="metric-label">BMI</span>
+                <span className="metric-value">{result.bmi.value}</span>
+                <span className="metric-category">{result.bmi.category}</span>
+              </div>
+
+              <div className="metric-card">
+                <span className="metric-label">BMR</span>
+                <span className="metric-value">{result.metabolism.bmr}</span>
+                <span className="metric-unit">kcal/day at rest</span>
+              </div>
+
+              <div className="metric-card">
+                <span className="metric-label">TDEE</span>
+                <span className="metric-value">{result.metabolism.tdee}</span>
+                <span className="metric-unit">total daily</span>
+              </div>
+
+              <div className="metric-card highlight">
+                <span className="metric-label">Target Calories</span>
+                <span className="metric-value large">{result.macros.calories}</span>
+                <span className="metric-unit">kcal/day</span>
+              </div>
+
+              <div className="metric-card highlight">
+                <span className="metric-label">Protein Goal</span>
+                <span className="metric-value large">{result.macros.protein}g</span>
+                <span className="metric-unit">daily intake</span>
+              </div>
+            </div>
+
+            {/* Meal Plan */}
+            <div className="meal-plan">
+              <h3 className="plan-title">Your Daily Meal Plan</h3>
+              <div className="meal-grid">
+                {Object.entries(result.diet_chart).map(([meal, foods]) => (
+                  <div key={meal} className="meal-card">
+                    <h4 className="meal-name">{meal.charAt(0).toUpperCase() + meal.slice(1)}</h4>
+                    <ul className="meal-list">
+                      {foods.map((food, idx) => (
+                        <li key={idx}>{food}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

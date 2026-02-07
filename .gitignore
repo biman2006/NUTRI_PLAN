@@ -3,22 +3,23 @@ venv/
 env/
 ENV/
 
-# Developer Documentation (not for version control)
-CODEBASE_EXPLANATION.md
-NEW_FIELDS_GUIDE.md
-
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
 
-# Environment Variables
+# Environment variables
 .env
 .env.local
 
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp

@@ -1,68 +1,142 @@
+/* ==============================================
+   VITALITY & SCIENCE - Design System
+   A bold, warm approach to health interfaces
+   ============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* Design Tokens */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Color Palette: Warm Vitality */
+  --vitality-coral: #FF6F59;
+  --vitality-deep: #C44536;
+  --forest-green: #2D6A4F;
+  --sage-light: #52B788;
+  --golden-amber: #F2B705;
+  --warm-cream: #FFF8E7;
+  --rich-earth: #1A1310;
+  --warm-dark: #2B2118;
+  --soft-cream: #FFFCF2;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Functional Colors */
+  --color-primary: var(--vitality-coral);
+  --color-secondary: var(--forest-green);
+  --color-accent: var(--golden-amber);
+  --color-bg: var(--soft-cream);
+  --color-surface: #FFFFFF;
+  --color-text: var(--rich-earth);
+  --color-text-soft: #4A3F35;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* Typography */
+  --font-display: 'DM Serif Display', serif;
+  --font-body: 'Outfit', sans-serif;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+
+  /* Borders & Radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Shadows: Organic depth */
+  --shadow-soft: 0 2px 12px rgba(26, 19, 16, 0.08);
+  --shadow-lifted: 0 8px 24px rgba(26, 19, 16, 0.12);
+  --shadow-bold: 0 16px 48px rgba(26, 19, 16, 0.16);
+
+  /* Animation */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
   min-height: 100vh;
+
+  /* Organic textured background */
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(242, 183, 5, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(45, 106, 79, 0.08) 0%, transparent 50%),
+    url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\"><filter id=\"noise\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"4\" /></filter><rect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.03\"/></svg>');
+}
+
+/* Typography Scale */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--rich-earth);
+  letter-spacing: -0.02em;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: var(--space-sm);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: var(--space-sm);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: var(--space-xs);
+}
+
+p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+/* Focus States */
+:focus-visible {
+  outline: 3px solid var(--vitality-coral);
+  outline-offset: 3px;
+}
+
+/* Selection */
+::selection {
+  background: var(--golden-amber);
+  color: var(--rich-earth);
 }

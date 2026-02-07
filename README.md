@@ -1,131 +1,136 @@
-<div align="center">
+# 🏋️ NUTRI PLAN
 
-# 🏋️ Diet Planner API
+**Professional Nutrition Planning Application** - A full-stack health and fitness platform combining scientific metabolic calculations with a stunning, art-driven interface.
 
-### *Your Personal Nutrition Companion*
-
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.128.3-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Pydantic](https://img.shields.io/badge/Pydantic-2.12.5-E92063?style=for-the-badge&logo=pydantic)](https://docs.pydantic.dev)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
-
-**A professional-grade REST API for personalized nutrition planning, BMI calculation, and macro-nutrient recommendations.**
-
-[Features](#-features) • [Quick Start](#-quick-start) • [API Documentation](#-api-documentation) • [Project Structure](#-project-structure) • [Roadmap](#-roadmap)
-
-</div>
+![Version](https://img.shields.io/badge/version-1.0.0-coral)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![React](https://img.shields.io/badge/react-19.2.0-blue)
 
 ---
 
 ## ✨ Features
 
-<table>
-<tr>
-<td width="50%">
+### 🔬 **Scientific Calculations**
+- **BMI Analysis** with WHO health category classification
+- **BMR Calculation** using Mifflin-St Jeor equation (gender-specific)
+- **TDEE Computation** with 5 activity level multipliers
+- **Macro Targets** with goal-based calorie adjustments
 
-### 📊 **Smart BMI Analysis**
-- Accurate BMI calculation
-- WHO-standard category classification
-- Health status indicators
+### 🎨 **Art-Driven Design**
+- Warm, organic color palette (Coral, Forest Green, Golden Amber)
+- Editorial typography with DM Serif Display + Outfit
+- Purposeful micro-animations and smooth transitions
+- Fully responsive (mobile, tablet, desktop)
 
-### 🔥 **Calorie Intelligence**
-- Goal-based calorie recommendations
-- Cut, bulk, or maintain options
-- Science-backed formulas
-
-</td>
-<td width="50%">
-
-### 💪 **Protein Optimization**
-- Customized protein requirements
-- Goal-specific multipliers
-- Muscle preservation focus
-
-### 🥗 **Personalized Meal Plans**
-- Complete daily meal breakdown
-- Breakfast, lunch, snacks & dinner
-- Goal-tailored portions
-
-</td>
-</tr>
-</table>
+### 📊 **Comprehensive API**
+- FastAPI backend with auto-generated docs
+- Pydantic validation for all inputs
+- Professional error handling and logging
+- CORS-enabled for frontend integration
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+- **Python 3.8+**
+- **Node.js 18+**
+- **Git**
 
-- Python 3.8 or higher
-- pip (Python package installer)
-
-### Installation
+### 1️⃣ Clone the Repository
 
 ```bash
-# 1. Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/biman2006/NUTRI_PLAN.git
 cd NUTRI_PLAN
+```
 
-# 2. Create and activate virtual environment
-# Windows
+### 2️⃣ Backend Setup
+
+```bash
+# Create virtual environment
 python -m venv venv
-.\venv\Scripts\activate
 
-# Linux/Mac
-python3 -m venv venv
-source venv/bin/activate
+# Activate (Windows)
+venv\Scripts\activate
+# Or Mac/Linux: source venv/bin/activate
 
-# 3. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# 4. Run the application
+# Start backend server
 uvicorn app.main:app --reload
 ```
 
-### 🎯 Your API is now running at:
-- **Interactive Docs**: http://localhost:8000/docs
-- **Alternative Docs**: http://localhost:8000/redoc
-- **Health Check**: http://localhost:8000/health
+**Backend runs on**: http://127.0.0.1:8000  
+**API Docs**: http://127.0.0.1:8000/docs
+
+###3️⃣ Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+**Frontend runs on**: http://localhost:5173
 
 ---
 
-## 📚 API Documentation
+## 📋 API Usage
 
-### Endpoints Overview
+### Endpoint: `POST /diet-plan`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/` | Welcome message & API info |
-| `GET` | `/health` | Health check & status |
-| `POST` | `/diet-plan` | Generate personalized diet plan |
+Generate a personalized nutrition plan based on user metrics.
 
-### Example Request
-
-**POST** `/diet-plan`
+#### Request Body
 
 ```json
 {
   "age": 25,
+  "gender": "male",
   "height": 1.75,
   "weight": 70,
+  "activity_level": "moderately_active",
   "goal": "maintain"
 }
 ```
 
-### Example Response
+#### Field Specifications
+
+| Field | Type | Options | Description |
+|-------|------|---------|-------------|
+| `age` | integer | 9-119 | User age in years |
+| `gender` | string | "male", "female" | Biological gender for BMR calculation |
+| `height` | float | 0.5-3.0 | Height in meters |
+| `weight` | float | 26-299 | Weight in kilograms |
+| `activity_level` | string | "sedentary", "lightly_active", "moderately_active", "very_active", "extra_active" | Daily physical activity level |
+| `goal` | string | "cut", "bulk", "maintain" | Fitness objective |
+
+#### Response
 
 ```json
 {
   "success": true,
   "data": {
     "age": 25,
+    "gender": "male",
+    "activity_level": "moderately_active",
     "goal": "maintain",
     "bmi": {
       "value": 22.86,
       "category": "Normal weight"
     },
+    "metabolism": {
+      "bmr": 1686,
+      "tdee": 2613
+    },
     "macros": {
-      "calories": 2240,
+      "calories": 2613,
       "protein": 112.0
     },
     "diet_chart": {
@@ -138,188 +143,239 @@ uvicorn app.main:app --reload
 }
 ```
 
-### Fitness Goals
-
-| Goal | Purpose | Calorie Multiplier | Protein Multiplier |
-|------|---------|-------------------|-------------------|
-| **cut** | Lose weight, preserve muscle | 28 kcal/kg | 2.2 g/kg |
-| **bulk** | Gain muscle mass | 36 kcal/kg | 1.8 g/kg |
-| **maintain** | Maintain current weight | 32 kcal/kg | 1.6 g/kg |
-
 ---
 
-## 📁 Project Structure
+## 🏗️ Project Structure
 
 ```
 NUTRI_PLAN/
-├── app/
-│   ├── __init__.py           # Package initialization
-│   ├── main.py               # FastAPI application
-│   ├── config.py             # Configuration & settings
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── requests.py       # Request validation models
-│   │   └── responses.py      # Response models
-│   ├── services/
-│   │   ├── __init__.py
-│   │   └── diet_service.py   # Business logic
-│   ├── routes/
-│   │   ├── __init__.py
-│   │   └── diet_routes.py    # API endpoints
-│   └── exceptions/
-│       └── __init__.py       # Error handlers
-├── tests/
-│   └── __init__.py           # Test suite
-├── .env.example              # Environment template
-├── .gitignore                # Git ignore rules
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
+├── app/                          # Backend (FastAPI)
+│   ├── main.py                  # Application entry point
+│   ├── config.py                # Settings & CORS configuration
+│   ├── models/                  # Pydantic request/response models
+│   │   ├── requests.py         # API request schemas
+│   │   └── responses.py        # API response schemas
+│   ├── services/                # Business logic
+│   │   └── diet_service.py     # BMR/TDEE/macro calculations
+│   ├── routes/                  # API endpoints
+│   │   └── diet_routes.py      # Diet planning routes
+│   └── exceptions/              # Custom error handling
+│       └── __init__.py         # Exception handlers
+│
+├── frontend/                     # Frontend (React + Vite)
+│   ├── src/
+│   │   ├── App.jsx              # Main application component
+│   │   ├── App.css              # Component-specific styles
+│   │   ├── index.css            # Global design system
+│   │   └── main.jsx             # React entry point
+│   ├── public/
+│   │   └── NutiPlanLogo.png    # Application logo
+│   ├── .env                     # Environment configuration
+│   └── package.json             # Dependencies
+│
+├── tests/                        # Test suite
+├── requirements.txt              # Python dependencies
+├── .env                          # Backend configuration
+├── .gitignore                    # Git exclusions
+└── README.md                     # This file
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## 🔧 Configuration
 
-- **Framework**: [FastAPI](https://fastapi.tiangolo.com) - Modern, fast web framework
-- **Validation**: [Pydantic](https://docs.pydantic.dev) - Data validation using Python type hints
-- **Server**: [Uvicorn](https://www.uvicorn.org) - Lightning-fast ASGI server
-- **Configuration**: [Pydantic Settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) - Environment management
+### Backend Environment (`.env`)
 
----
+```env
+LOG_LEVEL=INFO
+DEBUG=True
+```
 
-## 🎨 Key Highlights
+### Frontend Environment (`frontend/.env`)
 
-### ✅ Professional Architecture
-- Clean separation of concerns
-- Modular package structure
-- Industry best practices
+```env
+VITE_API_URL=http://127.0.0.1:8000
+```
 
-### ✅ Comprehensive Validation
-- Request/response validation
-- Custom field validators
-- Detailed error messages
-
-### ✅ Rich Documentation
-- Auto-generated OpenAPI docs
-- Complete type hints
-- Google-style docstrings
-
-### ✅ Error Handling
-- Global exception handlers
-- Standardized error responses
-- Detailed logging
-
-### ✅ Production Ready
-- CORS middleware
-- Environment configuration
-- Logging infrastructure
-- Health check endpoint
+For production, update `VITE_API_URL` to your deployed backend URL.
 
 ---
 
-## 🔮 Roadmap
+## 🎨 Design System
 
-### Coming Soon
+### Color Palette
 
-> [!IMPORTANT]
-> 🎨 **Frontend Integration** is currently in development!
-> 
-> We're building a beautiful, modern web interface to interact with this API. Stay tuned for:
-> - 📱 Responsive design
-> - 🎯 Interactive goal selection
-> - 📊 Visual nutrition charts
-> - 💾 Save and track your plans
+```css
+/* Primary Colors */
+--vitality-coral: #FF6F59    /* Energy & Action */
+--forest-green: #2D6A4F      /* Health & Growth */
+--golden-amber: #F2B705       /* Nutrition & Vitality */
 
-### Future Enhancements
+/* Base Colors */
+--rich-earth: #1A1310         /* Text & Depth */
+--soft-cream: #FFFCF2         /* Background */
+```
 
-- [ ] User authentication & profiles
-- [ ] Database integration
-- [ ] Meal plan history tracking
-- [ ] Advanced nutrition analysis
-- [ ] Recipe recommendations
-- [ ] Progress tracking & analytics
-- [ ] Multi-language support
-- [ ] Mobile app integration
+### Typography
+
+- **Display**: DM Serif Display (Editorial authority)
+- **Body**: Outfit (Modern readability)
+
+### Visual Principles
+
+- **Warm & Organic**: Earth tones create human connection
+- **Editorial Confidence**: Serif headlines establish authority
+- **Purposeful Motion**: Animations serve the narrative
+- **Accessible**: WCAG AA contrast compliance
 
 ---
 
-## 🧪 Testing the API
+## 🧮 Calculation Methods
 
-### Using cURL
+### BMR (Basal Metabolic Rate)
+**Mifflin-St Jeor Equation**:
+- Male: `(10 × weight_kg) + (6.25 × height_cm) - (5 × age) + 5`
+- Female: `(10 × weight_kg) + (6.25 × height_cm) - (5 × age) - 161`
+
+### TDEE (Total Daily Energy Expenditure)
+`TDEE = BMR × Activity Multiplier`
+
+**Activity Multipliers**:
+- Sedentary: 1.2
+- Lightly Active: 1.375
+- Moderately Active: 1.55
+- Very Active: 1.725
+- Extra Active: 1.9
+
+### Goal-Based Calorie Targets
+- **Maintain**: TDEE (no change)
+- **Cut**: TDEE - 500 kcal (≈0.5kg/week loss)
+- **Bulk**: TDEE + 300 kcal (lean muscle gain)
+
+### Protein Requirements
+- **Maintain**: weight × 1.6 g/kg
+- **Cut**: weight × 2.2 g/kg (muscle preservation)
+- **Bulk**: weight × 1.8 g/kg
+
+---
+
+## 📦 Production Build
+
+### Frontend Build
 
 ```bash
-# Health Check
-curl http://localhost:8000/health
-
-# Generate Diet Plan
-curl -X POST "http://localhost:8000/diet-plan" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "age": 25,
-    "height": 1.75,
-    "weight": 70,
-    "goal": "maintain"
-  }'
+cd frontend
+npm run build
 ```
 
-### Using Python
+Output: `frontend/dist/` (static files ready for deployment)
+
+### Deployment Options
+
+**Backend**:
+- Heroku, Railway, AWS EC2, Google Cloud Run
+- Update CORS origins in `app/config.py` for production
+
+**Frontend**:
+- Vercel, Netlify, GitHub Pages
+- Set `VITE_API_URL` environment variable
+
+---
+
+## 🧪 Testing
+
+### Run Backend Tests
+
+```bash
+pytest tests/
+```
+
+### Manual Testing
+
+1. Start both backend and frontend servers
+2. Navigate to http://localhost:5173
+3. Fill in all 6 required fields
+4. Submit form and verify response
+
+**Success Criteria**:
+- ✅ Form accepts all inputs
+- ✅ API returns 200 OK
+- ✅ Results display with BMI, BMR, TDEE, Calories, Protein
+- ✅ Meal plan renders correctly
+
+---
+
+## 🐛 Troubleshooting
+
+### "Failed to fetch" Error
+
+**Issue**: Frontend cannot connect to backend  
+**Solution**: Ensure backend is running on http://127.0.0.1:8000
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+### CORS Errors
+
+**Issue**: Cross-origin requests blocked  
+**Solution**: CORS is pre-configured. For production, update `app/config.py`:
 
 ```python
-import requests
+cors_origins: List[str] = ["https://your-frontend-domain.com"]
+```
 
-url = "http://localhost:8000/diet-plan"
-data = {
-    "age": 25,
-    "height": 1.75,
-    "weight": 70,
-    "goal": "maintain"
-}
+### Module Not Found (Backend)
 
-response = requests.post(url, json=data)
-print(response.json())
+**Issue**: `ModuleNotFoundError: No module named 'app'`  
+**Solution**: Run uvicorn from the correct directory:
+
+```bash
+cd NUTRI_PLAN  # Not the parent directory!
+uvicorn app.main:app --reload
 ```
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
+Contributions are welcome! Please follow these guidelines:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ---
 
-## 📝 License
+## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Author
-
-**Biman && Sukrit**
-
-- GitHub: [@Biman](https://github.com/biman2006)
-- GitHub: [@Sukrit](https://github.com/sukrit-89)
+This project is licensed under the MIT License.
 
 ---
 
-## 🙏 Acknowledgments
+## 🌟 Acknowledgments
 
-- FastAPI for the amazing framework
-- Pydantic for powerful validation
-- The Python community for continuous inspiration
+- **Mifflin-St Jeor Equation**: For scientifically accurate BMR calculation
+- **FastAPI**: For the powerful, modern Python framework
+- **React + Vite**: For the lightning-fast frontend tooling
+- **Design Inspiration**: Editorial health magazines & nutritional science
+
+---
+
+## 📞 Support
+
+For questions or issues:
+- **GitHub Issues**: [Report a bug](https://github.com/biman2006/NUTRI_PLAN/issues)
+- **API Documentation**: http://127.0.0.1:8000/docs
 
 ---
 
 <div align="center">
 
-### ⭐ If you find this project useful, please consider giving it a star!
+**Made with ❤️ and Science**
 
-**Made with ❤️ and Python**
+*Your body is a living system deserving of vibrant, intelligent nutrition.*
 
 </div>

@@ -1,42 +1,580 @@
-#root {
-  max-width: 1280px;
+/* ============================================
+   APP STYLES - Vitality & Science Interface
+   ============================================ */
+
+.app {
+  min-height: 100vh;
+  padding-bottom: var(--space-xl);
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  margin-bottom: var(--space-xl);
+  overflow: hidden;
+}
+
+.hero-accent {
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 111, 89, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0px);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
+
+.hero-logo {
+  display: block;
+  margin: 0 auto var(--space-md);
+  max-width: 280px;
+  height: auto;
+  animation: fadeIn 0.8s var(--ease-smooth);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-title {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-emphasis {
+  color: var(--vitality-coral);
+  font-style: italic;
+}
+
+.hero-subtitle {
+  margin-top: var(--space-sm);
+  font-size: 1.125rem;
+  color: var(--color-text-soft);
+  font-weight: 300;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.container {
+  max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 var(--space-md);
+}
+
+/* ============================================
+   FORM
+   ============================================ */
+.diet-form {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-lifted);
+  border: 1px solid rgba(26, 19, 16, 0.06);
+}
+
+.form-section {
+  margin-bottom: var(--space-lg);
+}
+
+.form-section:last-of-type {
+  margin-bottom: var(--space-md);
+}
+
+.section-title {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-md);
+  color: var(--rich-earth);
+}
+
+/* Input Grid */
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.input-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-group input {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1.125rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--soft-cream);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s var(--ease-smooth);
+}
+
+.input-group input:hover {
+  background: #FFF;
+  border-color: var(--sage-light);
+}
+
+.input-group input:focus {
+  background: #FFF;
+  border-color: var(--vitality-coral);
+  outline: none;
+}
+
+/* Gender Selector */
+.gender-selector {
+  margin-top: var(--space-md);
+}
+
+.selector-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+.gender-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.gender-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--soft-cream);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-smooth);
+}
+
+.gender-icon {
+  font-size: 1.5rem;
+}
+
+.gender-btn:hover {
+  background: #FFF;
+  border-color: var(--sage-light);
+  transform: translateY(-2px);
+}
+
+.gender-btn.active {
+  background: linear-gradient(135deg, var(--forest-green), var(--sage-light));
+  color: #FFF;
+  border-color: var(--forest-green);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Activity Grid */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-sm);
+}
+
+.activity-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-sm);
+  font-family: var(--font-body);
+  background: var(--soft-cream);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-smooth);
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.activity-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
-@keyframes logo-spin {
+.activity-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-soft);
+}
+
+.activity-card:hover {
+  background: #FFF;
+  border-color: var(--golden-amber);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.activity-card.active {
+  background: var(--golden-amber);
+  border-color: var(--golden-amber);
+  color: var(--rich-earth);
+  box-shadow: var(--shadow-lifted);
+}
+
+.activity-card.active .activity-label,
+.activity-card.active .activity-desc {
+  color: var(--rich-earth);
+}
+
+/* Goal Grid */
+.goal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+.goal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-lg) var(--space-md);
+  font-family: var(--font-body);
+  background: var(--soft-cream);
+  border: 3px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-bounce);
+  text-align: center;
+}
+
+.goal-emoji {
+  font-size: 3rem;
+  margin-bottom: var(--space-xs);
+}
+
+.goal-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.goal-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-soft);
+}
+
+.goal-card:hover {
+  background: #FFF;
+  border-color: var(--vitality-coral);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-bold);
+}
+
+.goal-card.active {
+  background: linear-gradient(135deg, var(--vitality-coral), var(--vitality-deep));
+  border-color: var(--vitality-deep);
+  color: #FFF;
+  box-shadow: var(--shadow-bold);
+}
+
+.goal-card.active .goal-label,
+.goal-card.active .goal-desc {
+  color: #FFF;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: #FFF;
+  background: linear-gradient(135deg, var(--vitality-coral)0%, var(--vitality-deep) 100%);
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-smooth);
+  box-shadow: var(--shadow-soft);
+  margin-top: var(--space-md);
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-bold);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-loading {
+  display: inline-block;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Error Message */
+.error-message {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: #FFF4F4;
+  border-left: 4px solid var(--vitality-deep);
+  border-radius: var(--radius-sm);
+  color: var(--vitality-deep);
+  font-size: 0.9375rem;
+}
+
+/* ============================================
+   RESULTS
+   ============================================ */
+.results {
+  animation: slideIn 0.5s var(--ease-smooth);
+}
+
+@keyframes slideIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(20px);
   }
+
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.results-title {
+  font-size: 2.5rem;
+  color: var(--rich-earth);
+}
+
+.reset-btn {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--forest-green);
+  background: transparent;
+  border: 2px solid var(--forest-green);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-smooth);
+}
+
+.reset-btn:hover {
+  background: var(--forest-green);
+  color: #FFF;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  background: var(--soft-cream);
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(45, 106, 79, 0.1);
+  transition: all 0.3s var(--ease-smooth);
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.metric-card.highlight {
+  background: linear-gradient(135deg, var(--forest-green), var(--sage-light));
+  color: #FFF;
+  border-color: var(--forest-green);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-soft);
+}
+
+.metric-card.highlight .metric-label,
+.metric-card.highlight .metric-unit {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--rich-earth);
+}
+
+.metric-value.large {
+  font-size: 2.5rem;
+}
+
+.metric-card.highlight .metric-value {
+  color: #FFF;
+}
+
+.metric-unit,
+.metric-category {
+  font-size: 0.8125rem;
+  color: var(--color-text-soft);
+}
+
+/* Meal Plan */
+.meal-plan {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-lifted);
+}
+
+.plan-title {
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+  color: var(--rich-earth);
+}
+
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-md);
+}
+
+.meal-card {
+  padding: var(--space-md);
+  background: var(--warm-cream);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--golden-amber);
+}
+
+.meal-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--rich-earth);
+  font-family: var(--font-body);
+}
+
+.meal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.meal-list li {
+  padding: var(--space-xs) 0;
+  font-size: 0.9375rem;
+  color: var(--color-text-soft);
+  border-bottom: 1px solid rgba(26, 19, 16, 0.08);
+}
+
+.meal-list li:last-child {
+  border-bottom: none;
+}
+
+.meal-list li::before {
+  content: "• ";
+  color: var(--golden-amber);
+  font-weight: bold;
+  margin-right: var(--space-xs);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
 
-.read-the-docs {
-  color: #888;
+  .goal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .meal-grid {
+    grid-template-columns: 1fr;
+  }
 }
